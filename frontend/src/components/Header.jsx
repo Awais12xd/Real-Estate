@@ -6,23 +6,76 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const navigate = useNavigate();
   const {currentUser} = useSelector((state) => state.user);
-  const [search , setSearch ] = useState("")
+  
+   const [seacrhData, setSearchData] = useState({
+      searchTerm: "",
+      parking: false,
+      furnished: false,
+      type: "all",
+      sort: "createdAt",
+      order: "desc",
+      offer: false,
+    });
 
   const handleSubmit =async (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search)
-    urlParams.set ("searchTerm" , search)
+     urlParams.set("searchTerm", seacrhData.searchTerm);
+    urlParams.set("type", seacrhData.type);
+    urlParams.set("parking", seacrhData.parking);
+    urlParams.set("offer", seacrhData.offer);
+    urlParams.set("furnished", seacrhData.furnished);
+    urlParams.set("sort", seacrhData.sort);
+    urlParams.set("order", seacrhData.order);
+
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`)
 
   }
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    const typeFromUrl = urlParams.get("type");
+    const parkingFromUrl = urlParams.get("parking");
+    const offerFromUrl = urlParams.get("offer");
+    const furnishedFromUrl = urlParams.get("furnished");
+    const sortFromUrl = urlParams.get("sort");
+    const orderFromUrl = urlParams.get("order");
+    if (searchTermFromUrl || typeFromUrl || parkingFromUrl || offerFromUrl || furnishedFromUrl || sortFromUrl || orderFromUrl) {
+      setSearchData({
+        search: searchTermFromUrl || "",
+        type: typeFromUrl || "all",
+        parking: parkingFromUrl === "true" ? true : false,
+        offer: offerFromUrl === "true" ? true : false,
+        furnished: furnishedFromUrl === "true" ? true : false,
+        sort: sortFromUrl || "createdAt",
+        order: orderFromUrl || "desc",
+      });
+    }
+
+  }, [location.search]);
+
+  useEffect(() => {
         const urlParams = new URLSearchParams(location.search)
+        const typeFromUrl = urlParams.get("type");
+    const parkingFromUrl = urlParams.get("parking");
+    const offerFromUrl = urlParams.get("offer");
+    const furnishedFromUrl = urlParams.get("furnished");
+    const sortFromUrl = urlParams.get("sort");
+    const orderFromUrl = urlParams.get("order");
         const searchTermFromUrl = urlParams.get("searchTerm");
-        if(searchTermFromUrl){
-        setSearch(searchTermFromUrl);
-      }
+       if (searchTermFromUrl || typeFromUrl || parkingFromUrl || offerFromUrl || furnishedFromUrl || sortFromUrl || orderFromUrl) {
+      setSearchData({
+        searchTerm: searchTermFromUrl || "",
+        type: typeFromUrl || "all",
+        parking: parkingFromUrl === "true" ? true : false,
+        offer: offerFromUrl === "true" ? true : false,
+        furnished: furnishedFromUrl === "true" ? true : false,
+        sort: sortFromUrl || "createdAt",
+        order: orderFromUrl || "desc",
+      });
+    }
   } ,[location.search])
   
   return (
@@ -36,8 +89,8 @@ const Header = () => {
         </Link>
         <form onSubmit={handleSubmit} className="bg-slate-100 p-2 rounded-lg flex items-center">
             <input type="search" placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={seacrhData?.searchTerm}
+            onChange={(e) => setSearchData({...seacrhData , searchTerm : (e.target.value)})}
             className="text-sm outline-none bg-transparent w-24 sm:w-64 "/>
             <button>
                <FaSearch className="text-slate-500 cursor-pointer"/>

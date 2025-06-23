@@ -33,10 +33,12 @@ const Listing = () => {
           rent: false,
           userRef:""
         });
+      const [loading , setLoading] = useState(false)
    
      useEffect(() => {
        try {
          const fetchListing = async () => {
+          setLoading(true)
           const res = await fetch(`/api/listing/single-listing/${id}`);
           const data = await res.json();
           if (!data.success) {
@@ -60,6 +62,7 @@ const Listing = () => {
             userRef:listing.userRef
           });
           setImageUrls(listing?.images)
+          setLoading(false)
 
         };
         fetchListing();
@@ -72,8 +75,10 @@ const Listing = () => {
   return (
     <main>
      <div className="">
-         
-      {listingData && <>
+         {
+          loading && <p className='text-xl text-center font-semibold mt-4'>Loading...</p>
+         }
+      {!loading && listingData && <>
       <Swiper navigation={true} >
          {
             imageUrls.map((image) => (
@@ -101,11 +106,15 @@ const Listing = () => {
         </div>
        <p className='flex gap-2 items-center'> <FaLocationDot className='text-xl text-green-600'/> {listingData?.address} </p>
        <div className="flex gap-2">
-        <p className='bg-green-700 text-white px-6 py-3 w-full max-w-[200px] text-center rounded-md'>
-       ${
+       {
+        listingData?.discountPrice > 0 && (
+      <p className='bg-green-700 text-white px-6 py-3 w-full max-w-[200px] text-center rounded-md'>
+        ${
         listingData?.discountPrice > 0 && parseInt(listingData?.regularPrice)-parseInt(listingData?.discountPrice)
-       }
+       } OFF
        </p>
+        )
+       }
        <p className='bg-red-700 text-white px-6 py-3 w-full max-w-[200px] text-center rounded-md'>
           {listingData?.rent === true ? "For Rent" : "For Sale"}
        </p>

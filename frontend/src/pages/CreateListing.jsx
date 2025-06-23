@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateListing = () => {
-    const Navigate = useNavigate();
+  const Navigate = useNavigate();
   const [listingData, setListingData] = useState({
     name: "",
     description: "",
@@ -98,7 +98,7 @@ const CreateListing = () => {
 
       if (response.ok) {
         alert("Listing Created Successfully!");
-        Navigate(`/listing/${data.data._id}`); 
+        Navigate(`/listing/${data.data._id}`);
         // Optionally reset state
       } else {
         alert(data.message || "Listing creation failed");
@@ -108,7 +108,6 @@ const CreateListing = () => {
       alert("Something went wrong");
     }
   };
-
 
   return (
     <main className="max-w-4xl mx-auto p-4">
@@ -211,6 +210,7 @@ const CreateListing = () => {
                 id="bedrooms"
                 className=" rounded-lg border w-14 text-center border-slate-400 py-2 outline-none"
                 min={1}
+                onChange={handleListingChange}
                 max={10}
                 required
               />
@@ -252,25 +252,27 @@ const CreateListing = () => {
                 <span className="text-xs">( $ / month)</span>
               </div>
             </div>
-             {listingData.offer && ( <div className="flex items-center gap-2 ">
-              <input
-                type="number"
-                id="discountPrice"
-                className=" rounded-lg border w-24 text-center border-slate-400 py-2 outline-none"
-                required
-                min={0}
-                onChange={handleListingChange}
-              />
-              <div className=" flex flex-col">
-                <label
-                  className="cursor-pointer text-sm"
-                  htmlFor="discountPrice"
-                >
-                  Discount Price
-                </label>
-                <span className="text-xs">( $ / month)</span>
+            {listingData.offer && (
+              <div className="flex items-center gap-2 ">
+                <input
+                  type="number"
+                  id="discountPrice"
+                  className=" rounded-lg border w-24 text-center border-slate-400 py-2 outline-none"
+                  required
+                  min={0}
+                  onChange={handleListingChange}
+                />
+                <div className=" flex flex-col">
+                  <label
+                    className="cursor-pointer text-sm"
+                    htmlFor="discountPrice"
+                  >
+                    Discount Price
+                  </label>
+                  <span className="text-xs">( $ / month)</span>
+                </div>
               </div>
-            </div> )}
+            )}
           </div>
         </div>
         <div className="flex-1 gap-4 flex flex-col">

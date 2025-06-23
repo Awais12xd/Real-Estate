@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAsyncError, useNavigate } from "react-router-dom";
+import ListingCard from "../components/ListingCard";
 
 const Search = () => {
   const [seacrhData, setSearchData] = useState({
@@ -59,17 +60,7 @@ const Search = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
 
-      setLoading(true)
-     try {
-       const seacrhQueryForRequest = urlParams.toString();
-      const response = await fetch(`/api/listing/getAllListings?${seacrhQueryForRequest}`)
-      const data = await response.json()
-      console.log(data)
-      setListings(data.data)
-      setLoading(false)
-     } catch (error) {
-      alert("error while searching")
-     }
+    
     
 
   };
@@ -94,6 +85,21 @@ const Search = () => {
         order: orderFromUrl || "desc",
       });
     }
+
+    const fetchList = async () => {
+        setLoading(true)
+     try {
+       const seacrhQueryForRequest = urlParams.toString();
+      const response = await fetch(`/api/listing/getAllListings?${seacrhQueryForRequest}`)
+      const data = await response.json()
+      console.log(data)
+      setListings(data.data)
+      setLoading(false)
+     } catch (error) {
+      alert("error while searching")
+     }
+    }
+    fetchList();
   }, [location.search]);
 
   return (
@@ -221,6 +227,22 @@ const Search = () => {
         {loading && (
           <p className="text-xl font-semibold text-center mt-5">Loading...</p>
         )}
+        {
+          !loading && listings.length === 0 && (
+            <p className=" mx-4 mt-5">No Listing Found!</p>
+          )
+        }
+       <div className="flex p-4 flex-wrap gap-6 w-full ">
+         {
+          !loading && listings && (
+            listings.map((listing) => (
+              
+                <ListingCard key={listing._id} listingData={listing} />
+             
+            ))
+         )
+        }
+       </div>
       </div>
     </div>
   );
