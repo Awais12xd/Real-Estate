@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Search = () => {
+
+  const [seacrhData , setSearchData] = useState([])
   return (
-    <div className="flex flex-col md:flex-row gap-2">
-      <div className=" p-4 border-b border-slate-300 md:border-r-1 md:h-screen">
+    <div className="flex flex-col md:flex-row w-full">
+      <div className=" p-4 border-b border-slate-300 md:border-r-1 md:h-screen md:w-[30%]">
         <form>
           <div className="flex items-center gap-2 search">
             <label className="whitespace-nowrap font-semibold">Search Term</label>
@@ -13,7 +15,7 @@ const Search = () => {
               className="text-sm outline-none bg-white p-3 rounded-lg w-full"
             />
           </div>
-          <div className="check-boxes items-center flex flex-wrap gap-4  mt-3">
+          <div className="check-boxes items-center flex flex-wrap gap-x-4 gap-y-2 mt-3">
             <label htmlFor="" className="font-semibold">Type :</label>
             <div className="flex  items-center gap-2 ">
               <input
@@ -60,7 +62,7 @@ const Search = () => {
             </div>
            
           </div>
-          <div className="check-boxes items-center flex flex-wrap gap-4  mt-3">
+          <div className="check-boxes items-center flex flex-wrap gap-x-4 gap-y-2 mt-3">
             <label htmlFor="" className="font-semibold">Amenities :</label>
             <div className="flex  items-center gap-2 ">
               <input
@@ -85,7 +87,7 @@ const Search = () => {
             </div>
           </div>
           <div className="flex gap-2 items-center mt-3">
-              <label className="font-semibold">Sort :</label>
+              <label className="font-semibold whitespace-nowrap">Sort :</label>
               <select id="sort_order"
               className="border px-3 py-2 rounded-lg cursor-pointer "
               >
@@ -100,8 +102,8 @@ const Search = () => {
         </button>
         </form>
       </div>
-      <div className="">
-        <h1>Serach Results:</h1>
+      <div className=" flex flex-col md:w-[70%] ">
+        <h1 className="text-xl sm:text-3xl text-slate-700 border-b-1 border-slate-300 p-3 mt-2 font-semibold w-full">Search Results:</h1>
       </div>
     </div>
   );
