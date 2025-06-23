@@ -197,7 +197,7 @@ const getAllListings = async (req , res , next) => {
    
         try {
              const limit = parseInt(req.query.limt) || 9;
-    const startIndex = parseIndex(req.query.startIndex) || 0;
+    const startIndex = parseInt(req.query.startIndex) || 0;
     let offer = req.query.offer;
     let furnished = req.query.furnished;
     let parking = req.query.parking;
@@ -211,14 +211,27 @@ const getAllListings = async (req , res , next) => {
     if(parking === "false" || parking === undefined){
         parking = { $in : [false, true]}
     }
+
+    let rent ,sell;
     if(type === "false" || type === "all"){
-         type = {$in:["rent" , "sale"]}
+         rent =  { $in : [false, true]}
+         sell =  { $in : [false, true]}
+    }
+    if(type === "rent"){
+      rent = true;
+      sell = false;
+    }
+    if(type === "sale"){
+      sell = true;
+      rent = false;
     }
 
-
+    
     const searchTerm = req.query.searchTerm || "";
     const order = req.query.order || "desc"
     const sort = req.query.sort || "createdAt"
+
+
 
     const listings = await Listing.find(
         {
@@ -226,7 +239,8 @@ const getAllListings = async (req , res , next) => {
             offer,
             furnished,
             parking,
-            type,
+            sell,
+            rent
         }
     ).sort(
         {[sort] : order}

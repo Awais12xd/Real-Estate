@@ -6,12 +6,12 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const navigate = useNavigate();
   const {currentUser} = useSelector((state) => state.user);
-  const [searchTerm , setSearchTerm ] = useState("")
+  const [search , setSearch ] = useState("")
 
   const handleSubmit =async (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search)
-    urlParams.set ("searchTerm" , searchTerm)
+    urlParams.set ("searchTerm" , search)
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`)
 
@@ -21,7 +21,7 @@ const Header = () => {
         const urlParams = new URLSearchParams(location.search)
         const searchTermFromUrl = urlParams.get("searchTerm");
         if(searchTermFromUrl){
-        setSearchTerm(searchTermFromUrl);
+        setSearch(searchTermFromUrl);
       }
   } ,[location.search])
   
@@ -36,8 +36,8 @@ const Header = () => {
         </Link>
         <form onSubmit={handleSubmit} className="bg-slate-100 p-2 rounded-lg flex items-center">
             <input type="search" placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="text-sm outline-none bg-transparent w-24 sm:w-64 "/>
             <button>
                <FaSearch className="text-slate-500 cursor-pointer"/>
