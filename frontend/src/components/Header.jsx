@@ -83,7 +83,7 @@ const Header = () => {
       <div className="flex justify-between items-center max-w-6xl mx-auto">
         <Link to={"/"}>
           <h1 className="text-sm sm:text-xl font-bold flex flex-wrap">
-            <span className="text-slate-600">Sahand</span>
+            <span className="text-slate-600">Awais</span>
             <span className="text-slate-800">Estate</span>
           </h1>
         </Link>
