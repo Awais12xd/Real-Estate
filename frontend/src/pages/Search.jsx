@@ -15,8 +15,7 @@ const Search = () => {
   const navigate = useNavigate();
   const [loading , setLoading] = useState(false)
   const [listings , setListings] = useState([]);
-  console.log(listings)
-
+  const [showMore , setShowMore] = useState(false)
 
   const handleChange = (e) => {
     if (
@@ -91,8 +90,10 @@ const Search = () => {
      try {
        const seacrhQueryForRequest = urlParams.toString();
       const response = await fetch(`/api/listing/getAllListings?${seacrhQueryForRequest}`)
-      const data = await response.json()
-      console.log(data)
+      const data = await response.json();
+      if(data.data.length > 8){
+       setShowMore(true)
+      }
       setListings(data.data)
       setLoading(false)
      } catch (error) {
@@ -101,6 +102,23 @@ const Search = () => {
     }
     fetchList();
   }, [location.search]);
+
+  const handleShowMore = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search)
+    urlParams.set("startIndex" , startIndex)
+    const searchQuery = urlParams.toString();
+    const response = await fetch(`/api/listing/getAllListings?${searchQuery}`)
+    const data = await response.json()
+    console.log(data)
+    if(data.data.length < 8){
+      setShowMore(false)
+    }else{
+      setShowMore(true)
+    }
+    setListings([...listings, ...data.data]);
+  }
 
   return (
     <div className="flex flex-col md:flex-row w-full">
@@ -242,7 +260,15 @@ const Search = () => {
             ))
          )
         }
+       
        </div>
+        {
+          showMore && (
+            <button onClick={handleShowMore} className="self-center cursor-pointer p-7 text-green-600 hover:underline text-center " >
+              Show More
+            </button>
+          )
+        }
       </div>
     </div>
   );
