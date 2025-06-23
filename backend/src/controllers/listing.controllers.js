@@ -194,7 +194,9 @@ const getSingleListing = async (req , res , next) => {
 }
 
 const getAllListings = async (req , res , next) => {
-    const limit = parseInt(req.query.limt) || 9;
+   
+        try {
+             const limit = parseInt(req.query.limt) || 9;
     const startIndex = parseIndex(req.query.startIndex) || 0;
     let offer = req.query.offer;
     let furnished = req.query.furnished;
@@ -229,10 +231,12 @@ const getAllListings = async (req , res , next) => {
     ).sort(
         {[sort] : order}
     ).limit(limit).skip(startIndex);
+       
+    res.json(new apiResponse(200, listings, "Listings found successfully"));
 
-
-
-
+        } catch (error) {
+            next(error)
+        }
 }
 
 
