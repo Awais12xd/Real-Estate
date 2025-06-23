@@ -6,10 +6,10 @@ import "../App.css"
 const ListingCard = ({listingData}) => {
     
   return (
-    <div className='bg-white shadow-lg hover:shadow-xl rounded-xl overflow-hidden transition-shadow duration-300 w-full sm:w-[330px]'>
+    <div className='bg-white shadow-lg hover:shadow-xl rounded-xl overflow-hidden transition-shadow duration-300 w-full  sm:w-[280px]'>
         <Link to={`/listing/${listingData?._id}`} className='flex flex-col'>
            <img src={listingData?.images[0]} 
-           className='sm:h-[320px] h-[220px] w-full object-cover hover:scale-105 transition-all duration-300'
+           className='sm:h-[280px] h-[220px] w-full object-cover hover:scale-105 transition-all duration-300'
            alt="Listing Cover" />
            <div className="p-3 flex flex-col gap-2">
             <p className='truncate font-semibold text-xl text-slate-700 w-full'>{listingData?.name}</p>

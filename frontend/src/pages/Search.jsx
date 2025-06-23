@@ -122,7 +122,7 @@ const Search = () => {
 
   return (
     <div className="flex flex-col md:flex-row w-full">
-      <div className=" p-4 border-b border-slate-300 md:border-r-1 md:h-screen md:w-[30%]">
+      <div className=" p-4 border-b border-slate-300 md:border-r-1 md:h-screen md:w-[25%]">
         <form onSubmit={handleSubmit}>
           <div className="flex items-center gap-2 search">
             <label className="whitespace-nowrap font-semibold">
@@ -238,7 +238,7 @@ const Search = () => {
           </button>
         </form>
       </div>
-      <div className=" flex flex-col md:w-[70%] ">
+      <div className=" flex flex-col md:w-[75%] ">
         <h1 className="text-xl sm:text-3xl text-slate-700 border-b-1 border-slate-300 p-3 mt-2 font-semibold w-full">
           Search Results:
         </h1>
