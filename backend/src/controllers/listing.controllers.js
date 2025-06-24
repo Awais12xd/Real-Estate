@@ -64,9 +64,9 @@ const createListing = async (req, res, next) => {
 };
 
 const getAllUserListings = async (req, res, next) => {
-  if (req.params.id == req.user._id) {
+  // if (req.params.id == req.user._id) {
     try {
-      const listings = await Listing.find({ userRef: req.user._id });
+      const listings = await Listing.find({ userRef: req.params.id});
 
       res
         .status(200)
@@ -76,9 +76,9 @@ const getAllUserListings = async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  } else {
-    return next(new ApiError(403, "You can only access your own listings"));
-  }
+  // } else {
+  //   return next(new ApiError(403, "You can only access your own listings"));
+  // }
 };
 
 const deleteListing = async (req, res, next) => {
