@@ -177,7 +177,7 @@ const Home = () => {
         )}
         {
            loadingOffer && (
-          <p className="text-md font-semibold my-4">Loading...</p>
+          <p className="text-md text-center font-semibold my-4">Loading...</p>
         )
         }
         {rentListings && !loadingRent && rentListings.length > 0 && (
@@ -200,7 +200,7 @@ const Home = () => {
         )}
         {
            loadingRent && (
-          <p className="text-md font-semibold my-4">Loading...</p>
+          <p className="text-center text-md font-semibold my-4">Loading...</p>
         )
         }
         {saleListings && !loadingSale && saleListings.length > 0 && (
@@ -223,7 +223,7 @@ const Home = () => {
         )}
         {
            loadingSale && (
-          <p className="text-md font-semibold my-4">Loading...</p>
+          <p className="text-center text-md font-semibold my-4">Loading...</p>
         )
         }
          {
