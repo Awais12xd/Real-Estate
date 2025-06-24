@@ -40,6 +40,7 @@ const SignIn = () => {
       return;
     }
       dispatch(signInSuccess(data.data));
+      console.log(data)
      navigate("/");
 
    } catch (error) {
