@@ -11,7 +11,7 @@ const  {currentUser} = useSelector((state) => state.user);
         currentUser ? (
             <Outlet/>
         ) : (
-            <Navigate to={"/sign-in"} />
+            <h1 className='text-lg font-semibold p-3 text-center'>Login before accessing this page!!</h1>
         )
       }
     </div>

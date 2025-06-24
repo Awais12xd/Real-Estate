@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 
 const CreateListing = () => {
   const Navigate = useNavigate();
@@ -21,7 +21,9 @@ const CreateListing = () => {
 
   const [files, setFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
-
+  const [loading , setLoading] = useState(false)
+  const [error , setError] = useState(null)
+  
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
@@ -87,7 +89,8 @@ const CreateListing = () => {
     for (let [key, value] of form.entries()) {
       console.log(`${key}:`, value);
     }
-
+     setLoading(true)
+     setError(null)
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/create`, {
         method: "POST",
@@ -95,17 +98,21 @@ const CreateListing = () => {
         body: form,
       });
       const data = await response.json();
-
+      console.log(data)
       if (response.ok) {
-        alert("Listing Created Successfully!");
-        Navigate(`/listing/${data.data._id}`);
+        setLoading(false)
+        setError(null)
+        Navigate(`/listing/${data.data._id}` , {
+          state : { toast: "🎉 Listing Created Successfully" }
+        });
         // Optionally reset state
       } else {
-        alert(data.message || "Listing creation failed");
+        setError(data.message || "Listing creation failed")
+        setLoading(false)
       }
     } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+      setError(error.message || "Listing creation failed")
+      setLoading(false)
     }
   };
 
@@ -325,11 +332,17 @@ const CreateListing = () => {
             </div>
           )}
 
-          <button className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 uppercase">
-            Create listing
+          <button disabled={loading} className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-no-drop uppercase">
+           {loading ? "Loading..." : "CREATE listing"}
           </button>
+          {
+            error && (
+              <p className="text-red-600 text-md mt-3">{error}</p>
+            )
+          }
         </div>
       </form>
+
     </main>
   );
 };

@@ -16,6 +16,8 @@ const Search = () => {
   const [loading , setLoading] = useState(false)
   const [listings , setListings] = useState([]);
   const [showMore , setShowMore] = useState(false)
+  const [error, setError] = useState(null)
+
 
   const handleChange = (e) => {
     if (
@@ -87,6 +89,7 @@ const Search = () => {
 
     const fetchList = async () => {
         setLoading(true)
+        setError(null)
      try {
        const seacrhQueryForRequest = urlParams.toString();
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?${seacrhQueryForRequest}`,
@@ -102,10 +105,18 @@ const Search = () => {
       if(data.data.length > 8){
        setShowMore(true)
       }
+      if(data.success){
       setListings(data.data)
       setLoading(false)
+      setError(null)
+      }
+      if(!data.success){
+      setLoading(false)
+      setError(data.message)
+      }
      } catch (error) {
-      alert("error while searching")
+      setLoading(false)
+      setError(error.message)
      }
     }
     fetchList();
@@ -250,17 +261,20 @@ const Search = () => {
         <h1 className="text-xl sm:text-3xl text-slate-700 border-b-1 border-slate-300 p-3 mt-2 font-semibold w-full">
           Search Results:
         </h1>
+        {error && (
+          <p className="text-md text-red-500 font-semibold text-center mt-5">{error}</p>
+        )}
         {loading && (
           <p className="text-xl font-semibold text-center mt-5">Loading...</p>
         )}
         {
-          !loading && listings.length === 0 && (
+          !loading && !error && listings.length === 0 && (
             <p className=" mx-4 mt-5">No Listing Found!</p>
           )
         }
        <div className="flex p-4 flex-wrap gap-6 w-full ">
          {
-          !loading && listings && (
+          !loading && !error && listings && (
             listings.map((listing) => (
               
                 <ListingCard key={listing._id} listingData={listing} />

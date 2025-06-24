@@ -22,6 +22,8 @@ const UpdateListing = () => {
   const [files, setFiles] = useState([]); // New files
   const [previewImages, setPreviewImages] = useState([]); // Will contain both old URLs and new files
   const [existingImages, setExistingImages] = useState([]);
+   const [loading , setLoading] = useState(false)
+    const [error , setError] = useState(null)
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -114,7 +116,8 @@ const UpdateListing = () => {
 
   // Append existing images
   form.append("existingImages", JSON.stringify(existingImages));
-
+   setLoading(true)
+   setError(null)
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/update/${id}`, {
         method: "POST",
@@ -123,14 +126,20 @@ const UpdateListing = () => {
       });
       const data = await response.json();
       if (!response.ok) {
-        alert(data.message || "Update failed");
+        setLoading(false)
+        setError(data.message || "Update failed")
         return;
       }
-      alert("Listing updated successfully");
-      navigate(`/listing/${data.data._id}`);
+      if(data.success){
+      setLoading(false)
+      setError(null)
+      navigate(`/listing/${data.data._id}` , {
+        state : { toast: "Listing Update Successfully!" }
+      });
+    }
     } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+       setLoading(false)
+      setError(error.message || "Update failed")
     }
   };
   
@@ -284,9 +293,14 @@ const UpdateListing = () => {
             </div>
           )}
           
-          <button className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 uppercase">
-            Update Listing
+          <button disabled={loading} className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 uppercase disabled:cursor-no-drop">
+            {loading ? "Loading..." : "Update Listing"}
           </button>
+           {
+            error && (
+              <p className="text-red-600 text-md mt-3">{error}</p>
+            )
+          }
         </div>
       </form>
     </main>

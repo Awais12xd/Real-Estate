@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import ListingCard from "../components/ListingCard.jsx";
+import Toast from "../components/Toast.jsx";
 
 const Home = () => {
   SwiperCore.use([Navigation]);
+  const location = useLocation()
   const [offerListings, setOfferListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
+  const [loadingOffer , setLoadingOffer] = useState(false)
+  const [loadingRent , setLoadingRent] = useState(false)
+  const [loadingSale , setLoadingSale] = useState(false)
+  const [error , setError] =useState(null)
+   const [toastMessage, setToastMessage] = useState(null);
+  
+    useEffect(() => {
+      if (location.state?.toast) {
+        setToastMessage(location.state.toast);
+        // Clear the state so it's not reused if user refreshes
+        window.history.replaceState({}, "");
+      }
+    }, [location]);
+ 
+
   useEffect(() => {
     const fetchOfferListings = async () => {
+      setLoadingOffer(true)
       try {
         const response = await fetch(
           `${
@@ -24,13 +42,21 @@ const Home = () => {
           }
         );
         const data = await response.json();
-        setOfferListings(data?.data);
-        fetchRentListings();
+        if(data.success === true){
+          setLoadingOffer(false)
+          setOfferListings(data?.data);
+          fetchRentListings();
+        }else{
+          setLoadingOffer(false)
+          setError(data.message)
+        }
       } catch (error) {
-        alert("error while loading offers");
+        setLoadingOffer(false)
+        setError(error.message)
       }
     };
     const fetchRentListings = async () => {
+      setLoadingRent(true)
       try {
         const response = await fetch(
           `${
@@ -42,13 +68,22 @@ const Home = () => {
           }
         );
         const data = await response.json();
-        setRentListings(data?.data);
-        fetchSaleListings();
+        if(data.success === true){
+          setLoadingRent(false)
+         
+          setRentListings(data?.data);
+          fetchSaleListings();
+        }else{
+          setLoadingRent(false)
+          setError(data.message)
+        }
       } catch (error) {
-        alert("error while loading rents");
+        setLoadingRent(false)
+        setError(error.message)
       }
     };
     const fetchSaleListings = async () => {
+      setLoadingSale(true)
       try {
         const response = await fetch(
           `${
@@ -60,9 +95,17 @@ const Home = () => {
           }
         );
         const data = await response.json();
+        if(data.success === true){
+          setLoadingSale(false)
+          setError(null)
         setSaleListings(data?.data);
+        }else{
+          setLoadingSale(false)
+          setError(data.message)
+        }
       } catch (error) {
-        alert("error while loading sales");
+        setLoadingSale(false)
+        setError(error.message)
       }
     };
     fetchOfferListings();
@@ -70,6 +113,11 @@ const Home = () => {
 
   return (
     <div>
+       <Toast
+          isVisible={!!toastMessage}
+          message={toastMessage}
+          onClose={() => setToastMessage(null)}
+        />
       <div className="flex flex-col gap-6 py-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-3xl lg:text-6xl text-slate-700 font-bold ">
           First your next <span className="text-slate-500">perfect</span>
@@ -87,8 +135,14 @@ const Home = () => {
           Let's Get Started...
         </Link>
       </div>
+      {
+        loadingOffer && (
+          <p className="text-md font-semibold my-4">Loading...</p>
+        )
+      }
+     
       <Swiper navigation={true}>
-        {offerListings &&
+        {offerListings && !loadingOffer &&
           offerListings.length > 0 &&
           offerListings.map((listing) => (
             <SwiperSlide key={listing?._id}>
@@ -103,7 +157,7 @@ const Home = () => {
           ))}
       </Swiper>
       <div className="my-6 max-w-7xl  mx-auto p-5 flex flex-col justify-center gap-10">
-        {offerListings && offerListings.length > 0 && (
+        {offerListings && !loadingOffer && offerListings.length > 0 && (
           <div className=" flex flex-col  justify-center">
             <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">
               Recent Offers
@@ -121,7 +175,12 @@ const Home = () => {
             </div>
           </div>
         )}
-        {rentListings && rentListings.length > 0 && (
+        {
+           loadingOffer && (
+          <p className="text-md font-semibold my-4">Loading...</p>
+        )
+        }
+        {rentListings && !loadingRent && rentListings.length > 0 && (
           <div className=" flex flex-col  justify-center">
             <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">
               Recent Places for rent
@@ -139,7 +198,12 @@ const Home = () => {
             </div>
           </div>
         )}
-        {saleListings && saleListings.length > 0 && (
+        {
+           loadingRent && (
+          <p className="text-md font-semibold my-4">Loading...</p>
+        )
+        }
+        {saleListings && !loadingSale && saleListings.length > 0 && (
           <div className=" flex flex-col  justify-center">
             <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">
               Recent Places for sale
@@ -157,7 +221,20 @@ const Home = () => {
             </div>
           </div>
         )}
+        {
+           loadingSale && (
+          <p className="text-md font-semibold my-4">Loading...</p>
+        )
+        }
+         {
+        error && (
+          <p className="text-red-500 font-semibold text-center my-5">{error}</p>
+        )
+      }
       </div>
+
+
+
     </div>
   );
 };

@@ -1,17 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate , useLocation } from 'react-router-dom'
 import {signInFailure,signInStart,signInSuccess} from "../features/user/userSlicer.js"
 import { useDispatch,useSelector } from 'react-redux';
 import OAuth from '../components/OAuth.jsx';
+import Toast from '../components/Toast.jsx';
 
 const SignIn = () => {
-
+  const location = useLocation();
    const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [formData , setFormData] = useState({});
   const {currentUser,error,loading} = useSelector((state) => state.user);
+  const [toastMessage, setToastMessage] = useState(null);
+
+
+  useEffect(() => {
+     if (location.state?.toast) {
+      setToastMessage(location.state.toast);
+      // Clear the state so it's not reused if user refreshes
+      window.history.replaceState({}, "");
+    }
+  } ,[location])
       
   const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value});
@@ -42,7 +53,9 @@ const SignIn = () => {
     }
       dispatch(signInSuccess(data.data));
       console.log(data)
-     navigate("/");
+     navigate("/", {
+      state: { toast: "✅ Sign In Successful! Welcome to our Website!" },
+    });
 
    } catch (error) {
        dispatch(signInFailure(error.message));
@@ -82,7 +95,12 @@ const SignIn = () => {
            <p className='text-red-500 text-sm mt-2'>{error}</p>
            }
          </div>
-     </div>   
+     </div>  
+     <Toast
+        isVisible={!!toastMessage}
+        message={toastMessage}
+        onClose={() => setToastMessage(null)}
+      /> 
      
       </div>
    </>

@@ -2,10 +2,12 @@ import React, { useRef, useState , useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser, userDeleteStart, userDeleteSuccess ,userDeleteFailure , signOutFailure , signOutStart , signOutSuccess } from "../features/user/userSlicer.js";
 import { Link, useNavigate } from "react-router-dom";
+import Toast from "../components/Toast.jsx";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+    const [showToast, setShowToast] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [listings, setListings] = useState([]);
@@ -15,7 +17,9 @@ const Profile = () => {
   const [file, setFile] = useState(undefined);
   const [newImg, setNewImg] = useState(null);
   const [formData, setFormData] = useState({})
-  let jugar = true;
+  const [loading , setLoading] = useState(false)
+  const [loadingShow , setLoadingShow] = useState(false)
+  const [error , setError] = useState(null)
 
 const handleOnChangePic = async (e) => {
   const selectedFile = e.target.files[0];
@@ -47,7 +51,8 @@ const handleSubmit = async (e) => {
   if (formData.username) form.append("username", formData.username);
   if (formData.email) form.append("email", formData.email);
   if (formData.password) form.append("password", formData.password);
-
+  setError(null)
+ setLoading(true)
   try {
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/updateProfile/${currentUser._id}`, {
       method: "POST",
@@ -58,16 +63,19 @@ const handleSubmit = async (e) => {
     const data = await response.json();
 
     if (response.ok) {
+      setShowToast(true);
+      setLoading(false)
+      setError(null)
       setNewImg(data.data.avatar.url);
       dispatch(updateUser(data.data));
-      alert("Profile updated successfully!");
       passRef.current.value = ""; 
     } else {
-      alert(data.message || "Upload failed");
+      setLoading(false)
+      setError(data.message || "Upload failed")
     }
   } catch (err) {
-    console.error(err);
-    alert("Something went wrong.");
+   setLoading(false)
+  setError(err.message || "Upload failed")
   }
 };
 
@@ -90,6 +98,9 @@ const handleDelete = async () => {
     const data = await response.json();
     if (response.ok) {
       dispatch(userDeleteSuccess(data.data));
+      navigate("/sign-in" , {
+        state: {toast : "Account Deleted Successfully!"}
+      })
       return;
     }
     if(data.success === false) {
@@ -99,9 +110,6 @@ const handleDelete = async () => {
     dispatch(userDeleteFailure(error.message));
   }
 }
-
-
-
 
 const handleSignOut = async () => {
   try {
@@ -116,13 +124,20 @@ const handleSignOut = async () => {
       dispatch(signOutFailure(data.message));
       return;
     }
+    if(data.success === true){
     dispatch(signOutSuccess());
+     navigate("/sign-in" , {
+        state: {toast : "Sign Out Successfully!"}
+      })
+    }
   } catch (error) {
     dispatch(signOutFailure(error.message));
   }
 }
 
 const handleShowListing = async () => {
+  setLoadingShow(true)
+  setError(null)
   try {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`,
       {
@@ -134,16 +149,20 @@ const handleShowListing = async () => {
       }
     );
     const data = await res.json();
-    console.log(data)
     if (!data.success) {
-      alert(data.message || "Failed to fetch listings");
+      setLoadingShow(false)
+      setError(data.message || "Failed to fetch listings")
       return;
     }
-    setListings(data.data);
+   if(data.success){
+    setLoadingShow(false)
+    setError(null)
+     setListings(data.data);
     setIsListings((prev) => !prev);
+   }
   } catch (error) {
-    alert("Something went wrong while showing listings.");
-    console.log(error.message)
+    setLoadingShow(false)
+    setError(error.message || "Failed to fetch listings")
     setIsListings(false);
   }
 };
@@ -196,6 +215,11 @@ const handleEditListing = (listingId) => {
           src={ previewUrl || currentUser?.avatar?.url }
           alt="profile"
         />
+        <Toast
+        isVisible={showToast}
+        message="Profile updated successfully 🎉"
+        onClose={() => setShowToast(false)}
+      />
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
           <input
             type="text"
@@ -221,12 +245,17 @@ const handleEditListing = (listingId) => {
             className="rounded-lg border border-slate-400  p-3 outline-none"
             onChange={handleChange}
           />
+          {
+    error && <p className="text-red-500 font-semibold text-md p-3">{error}</p>
+  }
           <button
             type="submit"
-
-            className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 uppercase" 
+             disabled={loading}
+            className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-no-drop uppercase" 
           >
-            update
+          {
+            loading ? "Loading..." : "Update"
+          }
           </button>
           <Link to={"/create-listing"} className="bg-green-700 text-white p-3 rounded-lg hover:opacity-90 text-center transition-all duration-300 cursor-pointer uppercase"> 
           Create Listing
@@ -243,8 +272,10 @@ const handleEditListing = (listingId) => {
   >
     Show Listings
   </span>
-
-  {isListings && (
+  {
+    loadingShow && <p className=" text-md p-3 mt-2">Loading...</p>
+  }
+  {isListings && !loadingShow && (
     listings.length > 0 ? (
       <>
         <h1 className="text-3xl text-center font-semibold my-8">Your Listings</h1>

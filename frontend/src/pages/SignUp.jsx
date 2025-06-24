@@ -45,7 +45,9 @@ const SignUp = () => {
      if (data.success) {
     console.log(data);
      }
-     navigate("/sign-in");
+     navigate("/sign-in" ,{
+      state: { toast: "✅ Sign Up Successful! Now you can log in." },
+    });
 
    } catch (error) {
        const errorRes = error.message;
