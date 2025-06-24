@@ -6,7 +6,7 @@ export const verifyToken = async (req, _, next) => {
   const token =   req.cookies?.access_token  || req.headers.authorization?.split(" ")[1];
   console.log(token)
   if (!token) {
-    throw new ApiError(404, "Unauthorized");
+    throw new ApiError(404, "Unauthorized error no token");
   }
 
   try {
