@@ -211,7 +211,7 @@ const handleEditListing = (listingId) => {
         />
         <img
           onClick={() => fileInputRef.current.click()}
-          className="w-24 h-24 rounded-full object-cover self-center mb-4"
+          className="w-24 h-24 cursor-pointer rounded-full object-cover self-center mb-4"
           src={ previewUrl || currentUser?.avatar?.url }
           alt="profile"
         />
