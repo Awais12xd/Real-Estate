@@ -235,7 +235,7 @@ const handleEditListing = (listingId) => {
     onClick={handleShowListing}
     className="text-green-700 text-center cursor-pointer text-normal"
   >
-    Show Listings
+    Show Listings yes
   </span>
 
   {isListings && (
