@@ -104,7 +104,10 @@ const googleController = async (req, res, next) => {
           Math.random().toString(36).substring(2, 6),
         email: req.body.email,
         password: hashedPassword,
-        avatar: req.body.photo,
+          avatar: {
+    url: req.body.photo || "https://up.yimg.com/ib/th?id=OIP.hGSCbXlcOjL_9mmzerqAbQHaHa&pid=Api&rs=1&c=1&qlt=95&w=114&h=114",
+    public_id: req.body.public_id || "",
+  },
       });
       if (!newUser) {
         return next(new ApiError(500, "User creation failed"));
