@@ -137,7 +137,7 @@ const Home = () => {
       </div>
       {
         loadingOffer && (
-          <p className="text-md font-semibold my-4">Loading...</p>
+          <p className="text-md font-semibold my-4 text-center w-full">Loading...</p>
         )
       }
      
