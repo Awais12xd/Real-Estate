@@ -130,7 +130,7 @@ const Home = () => {
         </p>
         <Link
           className="text-blue-800 text-xs sm:text-sm font-bold hover:underline"
-          to={"/search"}
+          to={"/search?type=all"}
         >
           Let's Get Started...
         </Link>
