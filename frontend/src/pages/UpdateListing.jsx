@@ -23,10 +23,14 @@ const UpdateListing = () => {
   const [previewImages, setPreviewImages] = useState([]); // Will contain both old URLs and new files
   const [existingImages, setExistingImages] = useState([]);
    const [loading , setLoading] = useState(false)
+   const [loadingListing , setLoadingListing] = useState(false)
     const [error , setError] = useState(null)
 
   useEffect(() => {
+
     const fetchListing = async () => {
+      setLoadingListing(true)
+      setError(null)
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/single-listing/${id}`,
         {
           method: "GET",
@@ -35,12 +39,14 @@ const UpdateListing = () => {
       );
       const data = await res.json();
       if (!data.success) {
-        alert(data.message || "Listing fetch failed");
+        setLoadingListing(false)
+        setError(data.message || "Listing fetch failed")
         return;
       }
-      const listing = data.data;
-
-      // Set listing data
+      if(data.success){
+        setLoadingListing(false)
+        setError(null)
+        const listing = data.data;
       setListingData({
         name: listing.name,
         description: listing.description,
@@ -55,9 +61,9 @@ const UpdateListing = () => {
         sell: listing.sell,
         rent: listing.rent,
       });
-      // Set existing images
       setExistingImages(listing.images || []);
       setPreviewImages(listing.images.map((url) => ({ id: url, url, isExisting: true })));
+      }
     };
     fetchListing();
   }, [id]);
@@ -145,7 +151,12 @@ const UpdateListing = () => {
   
   return (
     <main className="max-w-4xl mx-auto p-4">
-      <h1 className="text-3xl text-center mb-4 mt-2 font-semibold">Edit Listing</h1>
+      {
+        loadingListing && <p className="text-md font-semibold text-center p-3">Loading...</p>
+      }
+     {
+      !loadingListing && <>
+         <h1 className="text-3xl text-center mb-4 mt-2 font-semibold">Edit Listing</h1>
       <form onSubmit={handleListingSubmit} className="flex flex-col sm:flex-row w-full mt-5 gap-5">
         <div className="flex flex-col flex-1 gap-5">
           
@@ -296,6 +307,7 @@ const UpdateListing = () => {
           <button disabled={loading} className="bg-slate-800 text-white p-3 rounded-lg hover:opacity-90 transition-all duration-300 cursor-pointer disabled:opacity-50 uppercase disabled:cursor-no-drop">
             {loading ? "Loading..." : "Update Listing"}
           </button>
+          
            {
             error && (
               <p className="text-red-600 text-md mt-3">{error}</p>
@@ -303,6 +315,8 @@ const UpdateListing = () => {
           }
         </div>
       </form>
+      </>
+     }
     </main>
   );
 };
