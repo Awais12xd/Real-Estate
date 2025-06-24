@@ -285,14 +285,14 @@ const handleEditListing = (listingId) => {
             className="flex flex-col mt-3 gap-7 shadow-2xl p-3"
           >
             <div className="flex items-center gap-3 justify-between">
-              <div className="flex items-center gap-3">
+              <Link to={`/listing/${listing._id}`} className="flex items-center gap-3">
                 <img
                   className="w-28 h-20 object-cover"
                   src={listing.images[0]}
                   alt={listing.name}
                 />
-                <p>{listing.name}</p>
-              </div>
+                <p to={`/listing/${listing._id}`} className="hover:underline">{listing.name}</p>
+              </Link>
               <div className="flex flex-col gap-2">
                 <span
                   onClick={() => handleDeleteListing(listing._id)}
