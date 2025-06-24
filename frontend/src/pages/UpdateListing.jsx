@@ -111,7 +111,7 @@ const UpdateListing = () => {
   form.append("existingImages", JSON.stringify(existingImages));
 
     try {
-      const response = await fetch(`/api/listing/update/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/update/${id}`, {
         method: "POST",
         credentials: "include",
         body: form,

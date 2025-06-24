@@ -14,7 +14,15 @@ const Home = () => {
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?offer=true&limit=4&type=all`);
+        const response = await fetch(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/listing/getAllListings?offer=true&limit=4&type=all`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         const data = await response.json();
         setOfferListings(data?.data);
         fetchRentListings();
@@ -25,7 +33,13 @@ const Home = () => {
     const fetchRentListings = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?type=rent&limit=4`
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/listing/getAllListings?type=rent&limit=4`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
         );
         const data = await response.json();
         setRentListings(data?.data);
@@ -37,7 +51,13 @@ const Home = () => {
     const fetchSaleListings = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?type=sale&limit=4`
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/listing/getAllListings?type=sale&limit=4`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
         );
         const data = await response.json();
         setSaleListings(data?.data);
@@ -70,66 +90,73 @@ const Home = () => {
       <Swiper navigation={true}>
         {offerListings &&
           offerListings.length > 0 &&
-            (
-              offerListings.map((listing) => (
-                <SwiperSlide key={listing?._id}>
-                  <div
-                    className="h-[500px]"
-                    style={{
-                      background: `url(${listing?.images[0]}) center no-repeat`,
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
-                </SwiperSlide>
-              ))
-            )}
-      </Swiper> 
+          offerListings.map((listing) => (
+            <SwiperSlide key={listing?._id}>
+              <div
+                className="h-[500px]"
+                style={{
+                  background: `url(${listing?.images[0]}) center no-repeat`,
+                  backgroundSize: "cover",
+                }}
+              ></div>
+            </SwiperSlide>
+          ))}
+      </Swiper>
       <div className="my-6 max-w-7xl  mx-auto p-5 flex flex-col justify-center gap-10">
-          {
-            offerListings && offerListings.length > 0 && (
-              <div className=" flex flex-col  justify-center">
-                <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">Recent Offers</h1>
-                <Link to={"/search?offer=true&type=all"} className="text-blue-800 hover:underline mb-3 self-start">Show more offers..</Link>
-                <div className="flex flex-wrap gap-5  ">
-                  {
-                    offerListings.map((listing) => (
-                      <ListingCard key={listing._id}  listingData={listing}  /> 
-                    ))
-                  }
-                </div>
-              </div>
-            )
-          }
-           {
-              rentListings && rentListings.length > 0 && (
-              <div className=" flex flex-col  justify-center">
-                <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">Recent Places for rent</h1>
-                <Link to={"/search?type=rent"} className="text-blue-800 self-start hover:underline mb-3">Show more places for rent..</Link>
-                <div className="flex flex-wrap gap-5 ">
-                  {
-                    rentListings.map((listing) => (
-                      <ListingCard key={listing._id}  listingData={listing}  /> 
-                    ))
-                  }
-                </div>
-              </div>
-            )
-          }
-           {
-              saleListings && saleListings.length > 0 && (
-              <div className=" flex flex-col  justify-center">
-                <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">Recent Places for sale</h1>
-                <Link to={"/search?type=sale"} className="text-blue-800 self-start hover:underline mb-3">Show more places for sale..</Link>
-                <div className="flex flex-wrap gap-5">
-                  {
-                    saleListings.map((listing) => (
-                      <ListingCard key={listing._id}  listingData={listing}  /> 
-                    ))
-                  }
-                </div>
-              </div>
-            )
-          }
+        {offerListings && offerListings.length > 0 && (
+          <div className=" flex flex-col  justify-center">
+            <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">
+              Recent Offers
+            </h1>
+            <Link
+              to={"/search?offer=true&type=all"}
+              className="text-blue-800 hover:underline mb-3 self-start"
+            >
+              Show more offers..
+            </Link>
+            <div className="flex flex-wrap gap-5  ">
+              {offerListings.map((listing) => (
+                <ListingCard key={listing._id} listingData={listing} />
+              ))}
+            </div>
+          </div>
+        )}
+        {rentListings && rentListings.length > 0 && (
+          <div className=" flex flex-col  justify-center">
+            <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">
+              Recent Places for rent
+            </h1>
+            <Link
+              to={"/search?type=rent"}
+              className="text-blue-800 self-start hover:underline mb-3"
+            >
+              Show more places for rent..
+            </Link>
+            <div className="flex flex-wrap gap-5 ">
+              {rentListings.map((listing) => (
+                <ListingCard key={listing._id} listingData={listing} />
+              ))}
+            </div>
+          </div>
+        )}
+        {saleListings && saleListings.length > 0 && (
+          <div className=" flex flex-col  justify-center">
+            <h1 className="md:text-3xl text-2xl text-slate-700 font-semibold ">
+              Recent Places for sale
+            </h1>
+            <Link
+              to={"/search?type=sale"}
+              className="text-blue-800 self-start hover:underline mb-3"
+            >
+              Show more places for sale..
+            </Link>
+            <div className="flex flex-wrap gap-5">
+              {saleListings.map((listing) => (
+                <ListingCard key={listing._id} listingData={listing} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -119,10 +119,7 @@ const handleSignOut = async () => {
 
 const handleShowListing = async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`, {
-     method: "GET",
-  credentials: "include",
-    });
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`);
     const data = await res.json();
     console.log(data)
     if (!data.success) {
