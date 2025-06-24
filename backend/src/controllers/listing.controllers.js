@@ -4,6 +4,9 @@ import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import fs from "fs";
 
+
+
+
 const createListing = async (req, res, next) => {
   try {
     const {
@@ -64,7 +67,8 @@ const createListing = async (req, res, next) => {
 };
 
 const getAllUserListings = async (req, res, next) => {
-  // if (req.params.id == req.user._id) {
+  console.log(req.params.id , req.user._id)
+  if (req.params.id == req.user._id) {
     try {
       const listings = await Listing.find({ userRef: req.params.id});
 
@@ -76,9 +80,9 @@ const getAllUserListings = async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  // } else {
-  //   return next(new ApiError(403, "You can only access your own listings"));
-  // }
+  } else {
+    return next(new ApiError(403, "You can only access your own listings"));
+  }
 };
 
 const deleteListing = async (req, res, next) => {

@@ -99,6 +99,9 @@ const handleDelete = async () => {
   }
 }
 
+
+
+
 const handleSignOut = async () => {
   try {
     dispatch(signOutStart());
@@ -117,9 +120,11 @@ const handleSignOut = async () => {
 const handleShowListing = async () => {
   try {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`, {
-      credentials: "include",
+     method: "GET",
+  credentials: "include",
     });
     const data = await res.json();
+    console.log(data)
     if (!data.success) {
       alert(data.message || "Failed to fetch listings");
       return;
@@ -128,6 +133,7 @@ const handleShowListing = async () => {
     setIsListings((prev) => !prev);
   } catch (error) {
     alert("Something went wrong while showing listings.");
+    console.log(error.message)
     setIsListings(false);
   }
 };
