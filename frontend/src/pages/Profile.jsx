@@ -116,7 +116,9 @@ const handleSignOut = async () => {
 
 const handleShowListing = async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`);
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`, {
+      credentials: "include",
+    });
     const data = await res.json();
     if (!data.success) {
       alert(data.message || "Failed to fetch listings");
