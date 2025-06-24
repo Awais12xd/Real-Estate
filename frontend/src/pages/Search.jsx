@@ -89,7 +89,15 @@ const Search = () => {
         setLoading(true)
      try {
        const seacrhQueryForRequest = urlParams.toString();
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?${seacrhQueryForRequest}`)
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?${seacrhQueryForRequest}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include"
+        }
+      )
       const data = await response.json();
       if(data.data.length > 8){
        setShowMore(true)

@@ -56,27 +56,27 @@ const Header = () => {
 
   }, [location.search]);
 
-  useEffect(() => {
-        const urlParams = new URLSearchParams(location.search)
-        const typeFromUrl = urlParams.get("type");
-    const parkingFromUrl = urlParams.get("parking");
-    const offerFromUrl = urlParams.get("offer");
-    const furnishedFromUrl = urlParams.get("furnished");
-    const sortFromUrl = urlParams.get("sort");
-    const orderFromUrl = urlParams.get("order");
-        const searchTermFromUrl = urlParams.get("searchTerm");
-       if (searchTermFromUrl || typeFromUrl || parkingFromUrl || offerFromUrl || furnishedFromUrl || sortFromUrl || orderFromUrl) {
-      setSearchData({
-        searchTerm: searchTermFromUrl || "",
-        type: typeFromUrl || "all",
-        parking: parkingFromUrl === "true" ? true : false,
-        offer: offerFromUrl === "true" ? true : false,
-        furnished: furnishedFromUrl === "true" ? true : false,
-        sort: sortFromUrl || "createdAt",
-        order: orderFromUrl || "desc",
-      });
-    }
-  } ,[location.search])
+  // useEffect(() => {
+  //       const urlParams = new URLSearchParams(location.search)
+  //       const typeFromUrl = urlParams.get("type");
+  //   const parkingFromUrl = urlParams.get("parking");
+  //   const offerFromUrl = urlParams.get("offer");
+  //   const furnishedFromUrl = urlParams.get("furnished");
+  //   const sortFromUrl = urlParams.get("sort");
+  //   const orderFromUrl = urlParams.get("order");
+  //       const searchTermFromUrl = urlParams.get("searchTerm");
+  //      if (searchTermFromUrl || typeFromUrl || parkingFromUrl || offerFromUrl || furnishedFromUrl || sortFromUrl || orderFromUrl) {
+  //     setSearchData({
+  //       searchTerm: searchTermFromUrl || "",
+  //       type: typeFromUrl || "all",
+  //       parking: parkingFromUrl === "true" ? true : false,
+  //       offer: offerFromUrl === "true" ? true : false,
+  //       furnished: furnishedFromUrl === "true" ? true : false,
+  //       sort: sortFromUrl || "createdAt",
+  //       order: orderFromUrl || "desc",
+  //     });
+  //   }
+  // } ,[location.search])
   
   return (
     <header className="p-3 bg-slate-200 ">

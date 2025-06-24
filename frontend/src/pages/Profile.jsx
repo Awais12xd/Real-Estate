@@ -85,6 +85,7 @@ const handleDelete = async () => {
     dispatch(userDeleteStart());
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/delete/${currentUser._id}`, {
       method: "DELETE",
+      credentials: "include",
     });
     const data = await response.json();
     if (response.ok) {
@@ -105,7 +106,11 @@ const handleDelete = async () => {
 const handleSignOut = async () => {
   try {
     dispatch(signOutStart());
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`);
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`,
+      {
+        credentials: "include"
+      }
+    );
     const data = await response.json();
     if(data.success === false) {
       dispatch(signOutFailure(data.message));
@@ -150,6 +155,7 @@ const handleDeleteListing = async (listingId) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
 
     })
     const data = await response.json();

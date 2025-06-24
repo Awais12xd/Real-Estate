@@ -11,7 +11,13 @@ const Contact = ({listing}) => {
     }
      useEffect(() => {
          const fetchListing = async () => {
-           const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/${listing.userRef}`);
+           const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/${listing.userRef}`,
+            {
+              method: 'GET',
+              credentials : "include"
+
+            }
+           );
            const data = await res.json();
            if (!data.success) {
              alert(data.message || "Landlord fetch failed");
