@@ -241,7 +241,7 @@ const handleEditListing = (listingId) => {
   {isListings && (
     listings.length > 0 ? (
       <>
-        <h1 className="text-3xl text-center font-semibold my-8">Your Listings</h1>
+        <h1 className="text-3xl text-center font-semibold my-8">Your Listings yes</h1>
         {listings.map((listing) => (
           <div
             key={listing._id || listing.id}
