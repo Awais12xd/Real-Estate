@@ -11,12 +11,10 @@ const Home = () => {
   const [offerListings, setOfferListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
-  console.log(offerListings);
-
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const response = await fetch("/api/listing/getAllListings?offer=true&limit=4&type=all");
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?offer=true&limit=4&type=all`);
         const data = await response.json();
         setOfferListings(data?.data);
         fetchRentListings();
@@ -27,24 +25,24 @@ const Home = () => {
     const fetchRentListings = async () => {
       try {
         const response = await fetch(
-          "/api/listing/getAllListings?type=rent&limit=4"
+          `${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?type=rent&limit=4`
         );
         const data = await response.json();
         setRentListings(data?.data);
         fetchSaleListings();
       } catch (error) {
-        alert("error while loading offers");
+        alert("error while loading rents");
       }
     };
     const fetchSaleListings = async () => {
       try {
         const response = await fetch(
-          "/api/listing/getAllListings?type=sale&limit=4"
+          `${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?type=sale&limit=4`
         );
         const data = await response.json();
         setSaleListings(data?.data);
       } catch (error) {
-        alert("error while loading offers");
+        alert("error while loading sales");
       }
     };
     fetchOfferListings();

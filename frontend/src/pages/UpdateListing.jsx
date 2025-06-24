@@ -25,7 +25,7 @@ const UpdateListing = () => {
 
   useEffect(() => {
     const fetchListing = async () => {
-      const res = await fetch(`/api/listing/single-listing/${id}`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/single-listing/${id}`);
       const data = await res.json();
       if (!data.success) {
         alert(data.message || "Listing fetch failed");

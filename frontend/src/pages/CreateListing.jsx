@@ -89,7 +89,7 @@ const CreateListing = () => {
     }
 
     try {
-      const response = await fetch("/api/listing/create", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/create`, {
         method: "POST",
         credentials: "include",
         body: form,

@@ -6,12 +6,12 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   server:{
-    proxy:{
-      '/api':{
-        target:'http://localhost:5000',
-        secure:false
-    }
-  },
+  //   proxy:{
+  //     '/api':{
+  //       target:'https://real-estate-production-0285.up.railway.app/',
+  //       secure:false
+  //   }
+  // },
   },
   plugins: [react(),  tailwindcss()],
 })

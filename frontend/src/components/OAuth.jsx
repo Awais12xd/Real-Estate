@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const OAuth = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
     const handleClick =async () => {
         try {
             const provider = new GoogleAuthProvider()

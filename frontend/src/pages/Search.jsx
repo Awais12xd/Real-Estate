@@ -89,7 +89,7 @@ const Search = () => {
         setLoading(true)
      try {
        const seacrhQueryForRequest = urlParams.toString();
-      const response = await fetch(`/api/listing/getAllListings?${seacrhQueryForRequest}`)
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?${seacrhQueryForRequest}`)
       const data = await response.json();
       if(data.data.length > 8){
        setShowMore(true)
@@ -109,7 +109,7 @@ const Search = () => {
     const urlParams = new URLSearchParams(location.search)
     urlParams.set("startIndex" , startIndex)
     const searchQuery = urlParams.toString();
-    const response = await fetch(`/api/listing/getAllListings?${searchQuery}`)
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/getAllListings?${searchQuery}`)
     const data = await response.json()
     console.log(data)
     if(data.data.length < 8){

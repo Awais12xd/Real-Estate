@@ -25,7 +25,7 @@ const SignUp = () => {
     }
     setLoading(true);
    try {
-     const res = await fetch("api/auth/register" ,
+     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register` ,
       {
         method: "POST",
         headers: {
@@ -47,10 +47,11 @@ const SignUp = () => {
      navigate("/sign-in");
 
    } catch (error) {
-       const errorRes = error.response?.data;
+       const errorRes = error.message;
        console.log(errorRes);
    }
   }
+  
     
   return (
     <div>

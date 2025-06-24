@@ -49,7 +49,7 @@ const handleSubmit = async (e) => {
   if (formData.password) form.append("password", formData.password);
 
   try {
-    const response = await fetch(`/api/user/updateProfile/${currentUser._id}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/updateProfile/${currentUser._id}`, {
       method: "POST",
       credentials: "include",
       body: form,
@@ -83,7 +83,7 @@ const handleSubmit = async (e) => {
 const handleDelete = async () => {
   try {
     dispatch(userDeleteStart());
-    const response = await fetch(`/api/user/delete/${currentUser._id}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/delete/${currentUser._id}`, {
       method: "DELETE",
     });
     const data = await response.json();
@@ -102,7 +102,7 @@ const handleDelete = async () => {
 const handleSignOut = async () => {
   try {
     dispatch(signOutStart());
-    const response = await fetch('/api/auth/sign-out');
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`);
     const data = await response.json();
     if(data.success === false) {
       dispatch(signOutFailure(data.message));
@@ -116,7 +116,7 @@ const handleSignOut = async () => {
 
 const handleShowListing = async () => {
   try {
-    const res = await fetch(`/api/listing/listings/${currentUser._id}`);
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/listings/${currentUser._id}`);
     const data = await res.json();
     if (!data.success) {
       alert(data.message || "Failed to fetch listings");
@@ -132,7 +132,7 @@ const handleShowListing = async () => {
 
 const handleDeleteListing = async (listingId) => {
   try {
-    const response = await fetch(`/api/listing/delete/${listingId}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/listing/delete/${listingId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -24,8 +24,8 @@ const SignIn = () => {
     }
 
    dispatch(signInStart());
-   try {
-     const res = await fetch("api/auth/sign-in" ,
+   try{
+     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-in` ,
       {
         method: "POST",
         headers: {
