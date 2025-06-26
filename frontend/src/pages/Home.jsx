@@ -120,7 +120,7 @@ const Home = () => {
         />
       <div className="flex flex-col gap-6 py-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-3xl lg:text-6xl text-slate-700 font-bold ">
-          First your next <span className="text-slate-500">perfect</span>
+          Find your next <span className="text-slate-500">perfect</span>
           <br /> place with ease
         </h1>
         <p className="text-gray-400 text-xs sm:text-sm">
