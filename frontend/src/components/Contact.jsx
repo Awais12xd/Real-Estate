@@ -31,7 +31,7 @@ const Contact = ({listing}) => {
 
   return (
     <div className='flex flex-col gap-1'>
-      {/* hello  */}
+      {/* hello hehe */}
       {
         landlord && <>
             <p>Contact <span className='font-semibold'>{landlord?.username}</span> for <span className='font-semibold'>{listing?.name}</span></p>
